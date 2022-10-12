@@ -1,15 +1,11 @@
-from itertools import starmap, zip_longest
-from operator import eq
+from itertools import zip_longest
 
-from algorithms.task1.utils import create_position_dict, build_help_table
+from algorithms.task1.utils import build_help_table, create_position_dict
 
 
 def python_naive_search(text: str, pattern: str) -> int:
-    return sum(
-        1
-        for i in range(len(text) - len(pattern) + 1)
-        if all(starmap(eq, zip(text[i:], pattern)))
-    )
+    pattern_len = len(pattern)
+    return sum(text[i : i + pattern_len] == pattern for i in range(len(text) - pattern_len + 1))
 
 
 def naive_search(text: str, pattern: str) -> int:
@@ -19,7 +15,7 @@ def naive_search(text: str, pattern: str) -> int:
 
     for i in range(text_len - pattern_len + 1):
         check = True
-        for text_el, pattern_el in zip_longest(text[i:i + pattern_len], pattern):
+        for text_el, pattern_el in zip_longest(text[i : i + pattern_len], pattern):
             if text_el != pattern_el or text_el is None:
                 check = False
                 break
@@ -39,7 +35,7 @@ def sundays_search(text: str, pattern: str) -> int:
 
     while True:
         check = True
-        for text_el, pattern_el in zip_longest(text[i:i+pattern_len], pattern):
+        for text_el, pattern_el in zip_longest(text[i : i + pattern_len], pattern):
             if text_el != pattern_el or text_el is None:
                 check = False
                 break
