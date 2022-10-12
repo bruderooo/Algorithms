@@ -2,3 +2,4 @@
 /venv/
 .idea
 .mypy_cache
+/tests/.pytest_cache/

@@ -1,15 +1,11 @@
 import csv
 import string
-from random import choices
 from time import perf_counter_ns
 
 from algorithms.task1.search import kmp_search, naive_search, python_naive_search, sundays_search
+from algorithms.task1.utils import generate
 
 ALL_SIGNS = string.ascii_letters + string.digits + string.whitespace
-
-
-def generate(dictionary: str = ALL_SIGNS, length: int = 50) -> str:
-    return "".join(choices(dictionary, k=length))
 
 
 if __name__ == "__main__":
