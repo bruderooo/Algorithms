@@ -50,6 +50,7 @@ def sundays_search(text: str, pattern: str) -> int:
 
 
 def kmp_search(text: str, pattern: str) -> int:
+    # Knutha-Morrisa-Pratta
     text_len = len(text)
     pattern_len = len(pattern)
     help_table = build_help_table(pattern, pattern_len)
