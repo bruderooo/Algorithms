@@ -1,6 +1,7 @@
-from algorithms.task1.search import create_position_dict, naive_search, sundays_search, python_naive_search
+from algorithms.task1.search import create_position_dict, naive_search, sundays_search, python_naive_search, kmp_search
 
 import pytest
+
 
 def test_create_position_dict():
     expected = {"A": 1, "B": 7, "C": 2}
@@ -13,7 +14,7 @@ def test_create_position_dict():
 
 @pytest.mark.parametrize(
     "algorithms",
-    [python_naive_search, naive_search, sundays_search]
+    [python_naive_search, naive_search, sundays_search, kmp_search]
 )
 @pytest.mark.parametrize(
     ["text", "pattern", "exist"],
