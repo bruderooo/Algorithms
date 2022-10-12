@@ -2,12 +2,9 @@ import csv
 import string
 from random import choices
 from time import perf_counter_ns
-from typing import Callable
 
 import pandas as pd
 import seaborn as sns
-
-from algorithms.task1.search import kmp_search, naive_search, python_naive_search, sundays_search
 
 
 def create_position_dict(pattern: str) -> dict[str, int]:
@@ -41,7 +38,7 @@ def build_help_table(word: str, word_len: int) -> list[int]:
 
 def load_and_plot(name: str):
     df = pd.read_csv(f"{name}.csv")
-    return sns.pointplot(data=df, x=name, y="time[ns]", hue="function", errorbar=None)
+    return sns.pointplot(data=df, x=name, y="time[ns]", hue="function", errorbar=None, scale=0.6)
 
 
 def generate(dictionary: str = string.ascii_letters, length: int = 50) -> str:
@@ -55,7 +52,7 @@ def create_csv(value_name: str):
 
 
 def compute(
-    functions: list,  # type: ignore
+    functions: list,
     text: str,
     pattern: str,
     value_name: str,
