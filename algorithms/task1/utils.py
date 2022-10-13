@@ -36,9 +36,11 @@ def build_help_table(word: str, word_len: int) -> list[int]:
     return to_return
 
 
-def load_and_plot(name: str):
+def load_and_plot(name: str, scale: float = 0.6, rotation: float = 55):
     df = pd.read_csv(f"{name}.csv")
-    return sns.pointplot(data=df, x=name, y="time[ns]", hue="function", errorbar=None, scale=0.6)
+    plot = sns.pointplot(data=df, x=name, y="time[ns]", hue="function", errorbar=None, scale=scale)
+    plot.set_xticklabels(plot.get_xticklabels(), rotation=rotation, fontweight="light")
+    return plot
 
 
 def generate(dictionary: str = string.ascii_letters, length: int = 50) -> str:
