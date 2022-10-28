@@ -1,20 +1,29 @@
 import csv
 import string
 from random import choices
-from time import perf_counter_ns
+from timeit import default_timer as timer
+from typing import Dict, List
 
 import pandas as pd
 import seaborn as sns
+from matplotlib import pyplot as plt
 
 
-def create_position_dict(pattern: str) -> dict[str, int]:
+def create_position_dict(pattern: str) -> Dict[str, int]:
     reversed_pattern = pattern[::-1]
-    unique_pattern = set(pattern)
 
-    return {letter: reversed_pattern.find(letter) for letter in unique_pattern}
+    set_to_return = {}
+
+    for i, letter in enumerate(reversed_pattern):
+        if letter in set_to_return:
+            break
+        else:
+            set_to_return[letter] = i
+
+    return set_to_return
 
 
-def build_help_table(word: str, word_len: int) -> list[int]:
+def build_help_table(word: str, word_len: int) -> List[int]:
     to_return = [-1]
     pos = 1
     cnd = 0
@@ -36,21 +45,26 @@ def build_help_table(word: str, word_len: int) -> list[int]:
     return to_return
 
 
-def load_and_plot(name: str, scale: float = 0.6, rotation: float = 55):
+def load_and_plot(
+    name: str, scale: float = 0.6, rotate: int = 0, font_scale: float = 2.
+):
     df = pd.read_csv(f"{name}.csv")
-    plot = sns.pointplot(data=df, x=name, y="time[ns]", hue="function", errorbar=None, scale=scale)
-    plot.set_xticklabels(plot.get_xticklabels(), rotation=rotation, fontweight="light")
-    return plot
+    sns.set(font_scale=font_scale)
+    fig, ax = plt.subplots(1, 2, figsize=(30, 15))
+    sns.pointplot(data=df, x=name, y="time[ns]", hue="function", errorbar=None, scale=scale, ax=ax[0])
+    sns.pointplot(data=df, x=name, y="comparisons", hue="function", errorbar=None, scale=scale, ax=ax[1])
+    ax[0].tick_params(axis='x', rotation=rotate)
+    ax[1].tick_params(axis='x', rotation=rotate)
 
 
 def generate(dictionary: str = string.ascii_letters, length: int = 50) -> str:
     return "".join(choices(dictionary, k=length))
 
 
-def create_csv(value_name: str):
+def create_csv(value_name: str) -> None:
     with open(f"{value_name}.csv", "w", newline="") as f:
         writer = csv.writer(f)
-        writer.writerow(("count", value_name, "function", "time[ns]"))
+        writer.writerow(("count", value_name, "function", "time[ns]", "comparisons"))
 
 
 def compute(
@@ -59,12 +73,15 @@ def compute(
     pattern: str,
     value_name: str,
     value: int,
-):
+) -> None:
     for func in functions:
-        start_time = perf_counter_ns()
-        count = func(text=text, pattern=pattern)
-        end_time = perf_counter_ns()
+        times = []
+        for i in range(20):
+            start_time = timer()
+            count, comparisons = func(text=text, pattern=pattern)
+            end_time = timer()
+            times.append(end_time - start_time)
 
         with open(f"{value_name}.csv", "a", newline="") as f:
             writer = csv.writer(f)
-            writer.writerow((count, value, func.__name__, end_time - start_time))
+            writer.writerow((count, value, func.__name__, min(times), comparisons))

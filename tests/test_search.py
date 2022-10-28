@@ -1,9 +1,9 @@
 import pytest
 
-from algorithms.task1.search import kmp_search, naive_search, python_naive_search, sundays_search
+from algorithms.task1.search import kmp_search, naive_search, sundays_search
 
 
-@pytest.mark.parametrize("algorithms", [python_naive_search, naive_search, sundays_search, kmp_search])
+@pytest.mark.parametrize("algorithms", [naive_search, sundays_search, kmp_search])
 @pytest.mark.parametrize(
     ["text", "pattern", "exist"],
     [
@@ -15,7 +15,6 @@ from algorithms.task1.search import kmp_search, naive_search, python_naive_searc
     ],
 )
 def test_search(algorithms, text, pattern, exist):
-
-    actual = algorithms(text=text, pattern=pattern)
+    actual, counter = algorithms(text=text, pattern=pattern)
 
     assert exist == actual
