@@ -42,8 +42,7 @@ def test_same_key():
     hash_map[10] = 4
     hash_map[10] = "a"
 
-    assert "a" == hash_map[10][0]
-    assert 1 == len(hash_map[10])
+    assert "a" == hash_map[10]
 
 
 def test_items(hash_map):
@@ -83,7 +82,7 @@ def test_key_error(hash_map):
     [
         (1, contextlib.nullcontext()),
         (-1, pytest.raises(KeyError)),
-    ]
+    ],
 )
 def test_delete(key, get_context, hash_map):
     with get_context:
@@ -95,7 +94,23 @@ def test_delete(key, get_context, hash_map):
 
 def test_resize(hash_map):
     for i in range(2, 10):
-        hash_map[i] = i ** 2
+        hash_map[i] = i**2
 
     assert 12 == len(hash_map)
     assert 32 == hash_map._size
+
+
+def test_resize_to_smaller():
+    hash_map = HashMap(16)
+    hash_map[1] = 2
+
+    assert 1 == len(hash_map)
+    assert 8 == hash_map._size
+
+
+def test_create_from_tuples():
+    hash_map = HashMap.create_from_tuples([(1, "1"), (2, "2"), (3, "3")])
+
+    assert 3 == len(hash_map)
+    assert 4 == hash_map._size
+    assert {1: "1", 2: "2", 3: "3"} == hash_map
