@@ -74,7 +74,7 @@ class ChainHashMap(Map):
         percent = len(self) / self._size
 
         if percent > self._threshold:
-            size = self._size * 2
+            size = self._size + 1
         elif percent < self._threshold / 2 and self._size >= 16:
             size = self._size // 2
         else:

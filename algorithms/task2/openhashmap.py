@@ -1,17 +1,14 @@
-from typing import Any
+from typing import Any, Generator, Hashable
 
 from algorithms.task2.map import Map
 from algorithms.task2.utils import hash_sized, next_pow_2
 
 
 class OpenHashMap(Map):
-    def __eq__(self, other):
-        pass
-
     def __setitem__(self, key, value) -> None:
         self.insert(key, value)
 
-    def insert(self, key, value):
+    def insert(self, key: Hashable, value: Any):
         for i in range(self._size):
             key_hash = hash_sized(key, self._size, i)
 
@@ -23,7 +20,7 @@ class OpenHashMap(Map):
                 self._fix_map_size()
                 break
 
-    def __getitem__(self, key) -> Any:
+    def __getitem__(self, key: Hashable) -> Any:
         for i in range(self._size):
             key_hash = hash_sized(key, self._size, i)
 
@@ -37,7 +34,7 @@ class OpenHashMap(Map):
 
         raise KeyError(key)
 
-    def __delitem__(self, key):
+    def __delitem__(self, key: Hashable):
         for i in range(self._size):
             key_hash = hash_sized(key, self._size, i)
 
@@ -56,7 +53,7 @@ class OpenHashMap(Map):
         percent = len(self) / self._size
 
         if percent > self._threshold:
-            size = self._size * 2
+            size = self._size + 1
         elif percent < self._threshold / 2 and self._size >= 16:
             size = self._size // 2
         else:
@@ -70,8 +67,8 @@ class OpenHashMap(Map):
                 key_hash = hash_sized(key, size, i)
 
                 if (
-                        (element := new_key_val_table[key_hash]) is None
-                        or (element[0] == key and type(element[0]) == type(key))
+                    (element := new_key_val_table[key_hash]) is None
+                    or (element[0] == key and type(element[0]) == type(key))
                 ):
                     new_key_val_table[key_hash] = (key, value)
                     break
@@ -79,15 +76,14 @@ class OpenHashMap(Map):
         self._size = size
         self._key_val_table = new_key_val_table
 
-    def items(self):
+    def items(self) -> filter:
         return filter(lambda item: item is not None, self._key_val_table)
 
-    def keys(self):
+    def keys(self) -> Generator[Hashable, None, None]:
         return (item[0] for item in self._key_val_table if item is not None)
 
-    def values(self):
+    def values(self) -> Generator[Any, None, None]:
         return (item[1] for item in self._key_val_table if item is not None)
 
-    def __len__(self):
+    def __len__(self) -> int:
         return sum(1 for el in self._key_val_table if el is not None)
-

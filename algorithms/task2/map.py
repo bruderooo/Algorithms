@@ -1,18 +1,11 @@
 from abc import abstractmethod
 from typing import Any
 
-from algorithms.task2.types import HashTableType
-
 
 class Map:
-    def __init__(self, size: int = 8, threshold: float = 0.66, key_val_table: HashTableType = None):
+    def __init__(self, size: int = 8, threshold: float = 0.66):
         self._size = size
-
-        if key_val_table is None:
-            self._key_val_table = [None] * size
-        else:
-            self._key_val_table = key_val_table
-
+        self._key_val_table = [None] * size
         self._threshold = threshold
 
     @abstractmethod

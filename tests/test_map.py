@@ -1,5 +1,4 @@
 import contextlib
-from collections.abc import Generator
 
 import pytest
 
@@ -31,7 +30,10 @@ def chain_hash_map():
     return hash_map
 
 
-@pytest.fixture(params=['open_hash_map', 'chain_hash_map'])
+@pytest.fixture(params=[
+    'open_hash_map',
+    'chain_hash_map'
+])
 def map_obj(request):
     return request.getfixturevalue(request.param)
 
@@ -112,10 +114,8 @@ def test_resize(map_obj):
     for i in range(2, 10):
         map_obj[i] = i ** 2
 
-    print(map_obj)
-
     assert 12 == len(map_obj)
-    # assert 32 == map_obj._size
+    assert 32 == map_obj._size
 
 
 @pytest.mark.parametrize('map_type', [ChainHashMap, OpenHashMap])
@@ -124,4 +124,4 @@ def test_resize_to_smaller(map_type):
     hash_map[1] = 2
 
     assert 1 == len(hash_map)
-    assert 1 == hash_map._size
+    assert 8 == hash_map._size
