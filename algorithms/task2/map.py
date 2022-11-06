@@ -1,7 +1,7 @@
 from abc import abstractmethod
-from typing import Any, Hashable
+from typing import Any
 
-from algorithms.task2.utils import HashTableType, count
+from algorithms.task2.types import HashTableType
 
 
 class Map:
@@ -15,8 +15,9 @@ class Map:
 
         self._threshold = threshold
 
+    @abstractmethod
     def __len__(self):
-        return count(self._key_val_table)
+        raise NotImplementedError()
 
     @abstractmethod
     def __setitem__(self, key, value) -> None:

@@ -1,4 +1,6 @@
 if __name__ == '__main__':
-    l = ["asd", "dsad"]
+    t = (1, ("ef", 2), [3, 9])
 
-    print(sorted(l, key=(lambda x: (x[0], len(x)))))
+    print(len(t))
+    print(t * 5)
+    print(t.index("ef"))
