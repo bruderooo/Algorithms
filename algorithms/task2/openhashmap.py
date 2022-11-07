@@ -1,4 +1,3 @@
-from dataclasses import dataclass
 from typing import Any, Generator, Hashable
 
 from algorithms.task2.map import Map
