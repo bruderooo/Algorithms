@@ -30,10 +30,7 @@ def chain_hash_map():
     return hash_map
 
 
-@pytest.fixture(params=[
-    'open_hash_map',
-    'chain_hash_map'
-])
+@pytest.fixture(params=["open_hash_map", "chain_hash_map"])
 def map_obj(request):
     return request.getfixturevalue(request.param)
 
@@ -56,7 +53,7 @@ def test_get_item(map_obj):
     assert False is map_obj[True]
 
 
-@pytest.mark.parametrize('map_type', [ChainHashMap, OpenHashMap])
+@pytest.mark.parametrize("map_type", [ChainHashMap, OpenHashMap])
 def test_same_key(map_type):
     hash_map = map_type(8)
     hash_map[10] = 4
@@ -111,7 +108,7 @@ def test_delete(key, get_context, map_obj):
 
 def test_resize(map_obj):
     for i in range(2, 10):
-        map_obj[i] = i ** 2
+        map_obj[i] = i**2
 
     assert 12 == len(map_obj)
     assert 32 == map_obj._size
@@ -124,8 +121,9 @@ def test_resize_to_smaller(map_obj):
     assert 8 == map_obj._size
 
 
-def test(map_obj):
-    hashmap = OpenHashMap(8)
+@pytest.mark.parametrize("map_type", [ChainHashMap, OpenHashMap])
+def test_delete_loop(map_type):
+    hashmap = map_type(8)
     hashmap[1] = "a"
     hashmap[9] = "b"
 
