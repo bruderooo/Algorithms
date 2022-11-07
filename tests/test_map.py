@@ -49,8 +49,7 @@ def test_set_item(key, value):
     assert (key, value) == hash_map._key_val_table[correct_position][0]
 
 
-@pytest.mark.parametrize("size", [2, 4, 8])
-def test_get_item(size, map_obj):
+def test_get_item(map_obj):
     assert "b" == map_obj[1]
     assert 2.7 == map_obj[1.5]
     assert 4 == map_obj["a"]
@@ -118,10 +117,18 @@ def test_resize(map_obj):
     assert 32 == map_obj._size
 
 
-@pytest.mark.parametrize('map_type', [ChainHashMap, OpenHashMap])
-def test_resize_to_smaller(map_type):
-    hash_map = map_type(16)
-    hash_map[1] = 2
+def test_resize_to_smaller(map_obj):
+    del map_obj[1]
 
-    assert 1 == len(hash_map)
-    assert 8 == hash_map._size
+    assert 3 == len(map_obj)
+    assert 8 == map_obj._size
+
+
+def test(map_obj):
+    hashmap = OpenHashMap(8)
+    hashmap[1] = "a"
+    hashmap[9] = "b"
+
+    del hashmap[1]
+
+    assert hashmap[9] == "b"

@@ -29,7 +29,6 @@ class OpenHashMap(Map):
                 and element[0] == key
                 and type(element[0]) == type(key)
             ):
-                self._fix_map_size()
                 return element[1]
 
         raise KeyError(key)
