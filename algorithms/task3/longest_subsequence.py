@@ -1,7 +1,9 @@
+from functools import lru_cache
 from typing import Any
 
 
 def lcs(seq1, seq2):
+    @lru_cache(maxsize=None)
     def _lcs(i: int, j: int) -> list[Any]:
         if i == -1 or j == -1:
             return []
