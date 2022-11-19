@@ -1,6 +1,7 @@
 import tkinter as tk
 
 from algorithms.task3.longest_subsequence import lcs
+from algorithms.task3.match_enum import MatchEnum
 from algorithms.task3.view.textmatcher import TextMatcher
 
 
@@ -61,15 +62,15 @@ class Gui(tk.Frame):
                     next_ = next(shorter_iter)
 
                     if next_ != seq:
-                        shorter_text.insert(next_, "no_match")
-                        longer_text.insert("")
+                        shorter_text.insert(f"-{next_}", MatchEnum.NO_MATCH)
+                        longer_text.insert("", MatchEnum.NO_MATCH)
                     else:
-                        shorter_text.insert(next_, "match")
-                        longer_text.insert(raw_line, "match")
+                        shorter_text.insert(f"+{next_}", MatchEnum.MATCH)
+                        longer_text.insert(f"+{raw_line}", MatchEnum.MATCH)
                         break
             else:
-                longer_text.insert(raw_line, "no_match")
-                shorter_text.insert("")
+                longer_text.insert(f"-{raw_line}", MatchEnum.NO_MATCH)
+                shorter_text.insert("", MatchEnum.NO_MATCH)
 
-        for other_iter in shorter_iter:
-            shorter_text.insert(other_iter, "no_match")
+        for other_el in shorter_iter:
+            shorter_text.insert(f"-{other_el}", MatchEnum.NO_MATCH)

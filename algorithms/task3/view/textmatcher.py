@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import filedialog
 
+from algorithms.task3.match_enum import MatchEnum
+
 
 class TextMatcher:
     def __init__(self, frame: tk.Frame, side: str):
@@ -12,8 +14,8 @@ class TextMatcher:
 
         self.text_window = tk.Text(self.frame, width=50, height=20)
         self.text_window.pack(side="bottom", fill=tk.BOTH, expand=True)
-        self.text_window.tag_config("match", background="green", foreground="black")
-        self.text_window.tag_config("no_match", background="red", foreground="black")
+        self.text_window.tag_config(MatchEnum.MATCH, background="green", foreground="black")
+        self.text_window.tag_config(MatchEnum.NO_MATCH, background="red", foreground="black")
         self.raw_text = None
 
     def load_file(self):

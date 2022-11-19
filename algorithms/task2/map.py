@@ -1,6 +1,8 @@
 from abc import abstractmethod
 from typing import Any
 
+from algorithms.task2.utils import next_pow_2
+
 
 class Map:
     def __init__(self, size: int = 8, threshold: float = 0.66):
