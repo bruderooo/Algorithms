@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from itertools import pairwise
 from pathlib import Path
-
+from collections import defaultdict
 import graphviz
 
 from algorithms.task4.binary_heap import BinaryHeap
@@ -10,7 +10,7 @@ from algorithms.task4.binary_heap import BinaryHeap
 @dataclass
 class Graph:
     nodes: list[str]
-    edges: dict[tuple[str, str], float]
+    edges: dict[tuple[str, str], int]
 
     @classmethod
     def from_list_of_edges(cls, list_of_edges):
@@ -19,7 +19,7 @@ class Graph:
         for left_node, right_node, edge in list_of_edges:
             nodes.add(left_node)
             nodes.add(right_node)
-            edges[(left_node, right_node)] = float(edge)
+            edges[(left_node, right_node)] = int(edge)
         return cls(list(sorted(nodes)), edges)
 
     @classmethod
@@ -28,7 +28,7 @@ class Graph:
             map(lambda line: line.strip().split(" "), (Path(__file__).parent / file_name).open().readlines())
         )
 
-    def save_to_file(self, start_node: str | None = None, end_node: str | None = None):
+    def image(self, start_node: str | None = None, end_node: str | None = None):
         dot = graphviz.Digraph()
 
         validator = []
@@ -45,18 +45,12 @@ class Graph:
             else:
                 dot.edge(left_node, right_node, label=str(label))
 
-        dot.render()
+        return dot
 
     def dijkstra(self, start_node: str, end_node: str):
-        """
-        Returns the shortest path (with all nodes) and the distance between start_node and end_node. This implementation
-        uses heapq (binary heap).
-        """
-        from collections import defaultdict
-
         distances = defaultdict(lambda: float("inf"))
         distances[start_node] = 0
-        previous_nodes = defaultdict(lambda: None)
+        previous_nodes = {}
         heap = BinaryHeap()
         heap.push((0, start_node))
 
@@ -76,12 +70,6 @@ class Graph:
         current_node = end_node
         while current_node is not None:
             path.append(current_node)
-            current_node = previous_nodes[current_node]
+            current_node = previous_nodes.get(current_node, None)
         path.reverse()
         return path, distances[end_node]
-
-
-if __name__ == "__main__":
-    graph = Graph.from_file("sample.graph")
-    # print(graph.dijkstra("1", "5"))
-    graph.save_to_file("1", "5")

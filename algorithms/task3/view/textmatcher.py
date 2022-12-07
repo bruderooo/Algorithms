@@ -28,8 +28,7 @@ class TextMatcher:
     def load_file(self):
         file_path = filedialog.askopenfilename()
 
-        with open(file_path, "r") as file:
-            self.text_window.configure(state="normal")
+        with open(file_path, "r") as file, self.text_window_context():
             self.text_window.delete(1.0, tk.END)
             readed_file = file.read()
             self.insert(readed_file)
@@ -44,6 +43,6 @@ class TextMatcher:
             self.text_window.delete(1.0, tk.END)
 
     def reset_state(self):
-        self.text_window.configure(state="normal")
-        self.text_window.delete(1.0, tk.END)
-        self.insert("".join(self.raw_text))
+        with self.text_window_context():
+            self.text_window.delete(1.0, tk.END)
+            self.insert("".join(self.raw_text))

@@ -1,8 +1,10 @@
+from itertools import starmap
 from random import seed, shuffle
 
 import pytest
 
 from algorithms.task4.binary_heap import BinaryHeap
+from algorithms.task4.prioritized_item import PrioritizedItem
 
 
 @pytest.fixture
@@ -25,11 +27,11 @@ def heap_longer():
 
 
 def test_heapify(heap):
-    assert [(1, "a"), (2, "d"), (7, "c"), (4, "b"), (5, "e")] == heap._heap
+    assert list(starmap(PrioritizedItem, [(1, "a"), (2, "d"), (7, "c"), (4, "b"), (5, "e")])) == heap._heap
 
 
 def test_heapify_longer(heap_longer):
-    assert [
+    assert list(starmap(PrioritizedItem, [
         (1, "a"),
         (2, "b"),
         (7, "g"),
@@ -39,12 +41,12 @@ def test_heapify_longer(heap_longer):
         (100, "i"),
         (36, "f"),
         (17, "d"),
-    ] == heap_longer._heap
+    ])) == heap_longer._heap
 
 
 def test_pop(heap):
-    assert (1, "a") == heap.pop()
-    assert [(2, "d"), (4, "b"), (7, "c"), (5, "e")] == heap._heap
+    assert PrioritizedItem(1, "a") == heap.pop()
+    assert [PrioritizedItem(2, "d"), PrioritizedItem(4, "b"), PrioritizedItem(7, "c"), PrioritizedItem(5, "e")] == heap._heap
 
 
 @pytest.mark.parametrize(
@@ -57,4 +59,4 @@ def test_pop(heap):
 def test_push(heap, item, index):
     heap.push(item)
 
-    assert item == heap._heap[index]
+    assert PrioritizedItem(*item) == heap._heap[index]
