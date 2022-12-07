@@ -1,6 +1,6 @@
 import tkinter as tk
 
-from algorithms.task3.longest_subsequence import lcs
+from algorithms.task3.longest_subsequence import lcs_with_cached_table
 from algorithms.task3.match_enum import MatchEnum
 from algorithms.task3.view.textmatcher import TextMatcher
 
@@ -42,7 +42,7 @@ class Gui(tk.Frame):
             text.text_window.yview(*args)
 
     def search(self):
-        subsequences = lcs(self.texts[0].raw_text, self.texts[1].raw_text)
+        subsequences = lcs_with_cached_table(self.texts[0].raw_text, self.texts[1].raw_text)
 
         longer_text, shorter_text = (
             (self.texts[0], self.texts[1])
