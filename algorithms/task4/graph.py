@@ -33,17 +33,20 @@ class Graph:
 
         validator = []
         if start_node and end_node:
-            path, _ = self.dijkstra(start_node, end_node)
+            path, distance = self.dijkstra(start_node, end_node)
             validator = list(pairwise(path))
-            dot.attr(label=" \u2192 ".join(path), size="10,10")
+            dot.attr(label=" \u2192 ".join(path) + f"\nDistance: {distance}", size="10,10")
 
         for node in self.nodes:
             dot.node(node, node)
+
         for (left_node, right_node), label in self.edges.items():
-            if (left_node, right_node) in validator:
-                dot.edge(left_node, right_node, label=str(label), color="red")
-            else:
-                dot.edge(left_node, right_node, label=str(label))
+            dot.edge(
+                left_node,
+                right_node,
+                label=str(label),
+                color="red" if (left_node, right_node) in validator else "black"
+            )
 
         return dot
 
@@ -56,20 +59,20 @@ class Graph:
 
         while heap:
             current_distance, current_node = heap.pop()
-            if current_distance > distances[current_node]:
-                continue
-            for (left_node, right_node), edge in self.edges.items():
-                if left_node == current_node:
-                    new_distance = current_distance + edge
-                    if new_distance < distances[right_node]:
-                        distances[right_node] = new_distance
-                        previous_nodes[right_node] = current_node
-                        heap.push((new_distance, right_node))
+            if current_distance <= distances[current_node]:
+                for (left_node, right_node), edge in self.edges.items():
+                    if left_node == current_node:
+                        new_distance = current_distance + edge
+                        if new_distance < distances[right_node]:
+                            distances[right_node] = new_distance
+                            previous_nodes[right_node] = current_node
+                            heap.push((new_distance, right_node))
 
         path = []
         current_node = end_node
+
         while current_node is not None:
             path.append(current_node)
-            current_node = previous_nodes.get(current_node, None)
-        path.reverse()
-        return path, distances[end_node]
+            current_node = previous_nodes.get(current_node)
+
+        return path[::-1], distances[end_node]

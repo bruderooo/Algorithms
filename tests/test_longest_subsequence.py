@@ -1,6 +1,6 @@
 import pytest
 
-from algorithms.task3.longest_subsequence import lcs, lcs_for, lcs_with_cached_table
+from algorithms.task3.longest_subsequence import lcs, lcs_with_cached_table
 
 
 @pytest.fixture
@@ -25,13 +25,5 @@ def test_longest_subsequence_cached(sequence_first, sequence_second):
     expected = [4, 5, 6, 7, 8, 9]
 
     actual = lcs_with_cached_table(sequence_first, sequence_second)
-
-    assert expected == actual
-
-
-def test_lcs_for(sequence_first, sequence_second):
-    expected = [4, 5, 6, 7, 8, 9]
-
-    actual = lcs_for(sequence_first, sequence_second)
 
     assert expected == actual
