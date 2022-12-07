@@ -62,15 +62,15 @@ class Gui(tk.Frame):
                     next_ = next(shorter_iter)
 
                     if next_ != seq:
-                        shorter_text.insert(f"-{next_}", MatchEnum.NO_MATCH)
-                        longer_text.insert("", MatchEnum.NO_MATCH)
+                        shorter_text.insert(next_, tag=MatchEnum.NO_MATCH)
+                        longer_text.insert(tag=MatchEnum.NO_MATCH)
                     else:
-                        shorter_text.insert(f"+{next_}", MatchEnum.MATCH)
-                        longer_text.insert(f"+{raw_line}", MatchEnum.MATCH)
+                        shorter_text.insert(next_, tag=MatchEnum.MATCH)
+                        longer_text.insert(raw_line, tag=MatchEnum.MATCH)
                         break
             else:
-                longer_text.insert(f"-{raw_line}", MatchEnum.NO_MATCH)
-                shorter_text.insert("", MatchEnum.NO_MATCH)
+                longer_text.insert(raw_line, tag=MatchEnum.NO_MATCH)
+                shorter_text.insert(tag=MatchEnum.NO_MATCH)
 
         for other_el in shorter_iter:
-            shorter_text.insert(f"-{other_el}", MatchEnum.NO_MATCH)
+            shorter_text.insert(other_el, tag=MatchEnum.NO_MATCH)

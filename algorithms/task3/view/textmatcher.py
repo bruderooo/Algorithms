@@ -1,4 +1,5 @@
 import tkinter as tk
+from contextlib import contextmanager
 from tkinter import filedialog
 
 from algorithms.task3.match_enum import MatchEnum
@@ -18,6 +19,12 @@ class TextMatcher:
         self.text_window.tag_config(MatchEnum.NO_MATCH, background="red", foreground="black")
         self.raw_text = None
 
+    @contextmanager
+    def text_window_context(self):
+        self.text_window.configure(state="normal")
+        yield
+        self.text_window.configure(state="disabled")
+
     def load_file(self):
         file_path = filedialog.askopenfilename()
 
@@ -28,15 +35,13 @@ class TextMatcher:
             self.insert(readed_file)
             self.raw_text = readed_file.splitlines()
 
-    def insert(self, text: str, tag: str = None):
-        self.text_window.configure(state="normal")
-        self.text_window.insert(tk.END, f"{text}\n".encode("UTF-8"), tag)
-        self.text_window.configure(state="disabled")
+    def insert(self, text: str = "", *, tag: str = None):
+        with self.text_window_context():
+            self.text_window.insert(tk.END, f"{text}\n", tag)
 
     def clear(self):
-        self.text_window.configure(state="normal")
-        self.text_window.delete(1.0, tk.END)
-        self.text_window.configure(state="disabled")
+        with self.text_window_context():
+            self.text_window.delete(1.0, tk.END)
 
     def reset_state(self):
         self.text_window.configure(state="normal")
