@@ -45,15 +45,13 @@ class OpenHashMap(Map):
         for i in range(self._size):
             key_hash = hash_sized(key, self._size, i)
 
-            if (
-                (element := self._key_val_table[key_hash]) is not None
-                and element is not OpenHashMap.DELETED
-                and element[0] == key
-                and type(element[0]) == type(key)
-            ):
-                self._key_val_table[key_hash] = OpenHashMap.DELETED
-                self._fix_map_size()
-                return
+            if (element := self._key_val_table[key_hash]) is not None:
+                if element is not OpenHashMap.DELETED and element[0] == key and type(element[0]) == type(key):
+                    self._key_val_table[key_hash] = OpenHashMap.DELETED
+                    self._fix_map_size()
+                    return
+            else:
+                raise KeyError(key)
 
         raise KeyError(key)
 
