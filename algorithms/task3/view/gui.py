@@ -44,17 +44,13 @@ class Gui(tk.Frame):
     def search(self):
         subsequences = lcs_with_cached_table(self.texts[0].raw_text, self.texts[1].raw_text)
 
-        longer_text, shorter_text = (
-            (self.texts[0], self.texts[1])
-            if len(self.texts[0].raw_text) > len(self.texts[1].raw_text)
-            else (self.texts[1], self.texts[0])
-        )
-        shorter_iter = iter(shorter_text.raw_text)
+        left_text, right_text = self.texts[0], self.texts[1]
+        shorter_iter = iter(right_text.raw_text)
 
         for text in self.texts:
             text.clear()
 
-        for i, raw_line in enumerate(longer_text.raw_text):
+        for raw_line in left_text.raw_text:
             if raw_line in subsequences:
                 seq = subsequences.pop(0)
 
@@ -62,15 +58,15 @@ class Gui(tk.Frame):
                     next_ = next(shorter_iter)
 
                     if next_ != seq:
-                        shorter_text.insert(next_, tag=MatchEnum.NO_MATCH)
-                        longer_text.insert(tag=MatchEnum.NO_MATCH)
+                        right_text.insert(next_, tag=MatchEnum.NO_MATCH)
+                        left_text.insert(tag=MatchEnum.NO_MATCH)
                     else:
-                        shorter_text.insert(next_, tag=MatchEnum.MATCH)
-                        longer_text.insert(raw_line, tag=MatchEnum.MATCH)
+                        right_text.insert(next_, tag=MatchEnum.MATCH)
+                        left_text.insert(raw_line, tag=MatchEnum.MATCH)
                         break
             else:
-                longer_text.insert(raw_line, tag=MatchEnum.NO_MATCH)
-                shorter_text.insert(tag=MatchEnum.NO_MATCH)
+                left_text.insert(raw_line, tag=MatchEnum.NO_MATCH)
+                right_text.insert(tag=MatchEnum.NO_MATCH)
 
         for other_el in shorter_iter:
-            shorter_text.insert(other_el, tag=MatchEnum.NO_MATCH)
+            right_text.insert(other_el, tag=MatchEnum.NO_MATCH)

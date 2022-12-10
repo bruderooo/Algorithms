@@ -1,6 +1,18 @@
 from algorithms.task4.prioritized_item import PrioritizedItem
 
 
+def _parent_index(i: int) -> int:
+    return (i - 1) // 2
+
+
+def _left_child_index(i: int) -> int:
+    return 2 * i + 1
+
+
+def _right_child_index(i: int) -> int:
+    return 2 * i + 2
+
+
 class BinaryHeap:
     def __init__(self):
         self._heap = []
@@ -31,7 +43,7 @@ class BinaryHeap:
         new_item = self._heap[pos]
 
         while pos > 0:
-            parent_pos = (pos - 1) // 2
+            parent_pos = _parent_index(pos)
             if new_item >= (parent := self._heap[parent_pos]):
                 break
             else:
@@ -45,7 +57,7 @@ class BinaryHeap:
         size = len(self._heap)
         new_item = self._heap[pos]
 
-        left_child_index = 2 * pos + 1
+        left_child_index = _left_child_index(pos)
         while left_child_index < size:
             right_child_index = left_child_index + 1
             if right_child_index < size and self._heap[left_child_index] >= self._heap[right_child_index]:
@@ -53,7 +65,7 @@ class BinaryHeap:
 
             self._heap[pos] = self._heap[left_child_index]
             pos = left_child_index
-            left_child_index = 2 * pos + 1
+            left_child_index = _left_child_index(pos)
 
         self._heap[pos] = new_item
         self.sift_down(pos)
