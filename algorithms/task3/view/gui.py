@@ -41,14 +41,17 @@ class Gui(tk.Frame):
         for text in self.texts:
             text.text_window.yview(*args)
 
+    def clear(self):
+        for text in self.texts:
+            text.clear()
+
     def search(self):
+        self.clear()
+
         subsequences = lcs_with_cached_table(self.texts[0].raw_text, self.texts[1].raw_text)
 
         left_text, right_text = self.texts[0], self.texts[1]
         shorter_iter = iter(right_text.raw_text)
-
-        for text in self.texts:
-            text.clear()
 
         for raw_line in left_text.raw_text:
             if raw_line in subsequences:
